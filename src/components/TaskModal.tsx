@@ -182,7 +182,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, task }) 
             </div>
           </div>
 
-          {/* Actions - Buttons side by side on desktop, stacked on mobile */}
+          {/* Actions */}
           <div className="flex flex-col sm:flex-row justify-end gap-3 pt-6 border-t border-gray-200">
             <button
               type="button"

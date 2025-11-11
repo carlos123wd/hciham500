@@ -32,7 +32,6 @@ function App() {
   
   const { user, signOut, loading: authLoading } = useAuth();
 
-  // Load tasks
   useEffect(() => {
     const loadTasks = async () => {
       const loadedTasks = await getStoredTasks();
@@ -41,7 +40,6 @@ function App() {
     loadTasks();
   }, [user]);
 
-  // Save tasks when they change
   useEffect(() => {
     if (tasks.length > 0) {
       setStoredTasks(tasks);
@@ -96,7 +94,6 @@ function App() {
     setEditingTask(null);
   };
 
-  // Filter tasks
   const filteredTasks = tasks.filter(task => {
     const now = new Date();
     const taskDate = new Date(task.dueDate);
@@ -129,7 +126,6 @@ function App() {
     return dateMatch && searchMatch;
   });
 
-  // Statistics
   const totalTasks = tasks.length;
   const completedTasks = tasks.filter(task => task.status === 'completed').length;
   const pendingPayments = tasks
@@ -192,7 +188,6 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Top Navigation */}
       <nav className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -245,7 +240,6 @@ function App() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {!user ? (
-          // Welcome screen for non-logged in users
           <div className="text-center py-12">
             <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <User size={48} className="text-blue-600" />
@@ -264,18 +258,14 @@ function App() {
             </button>
           </div>
         ) : (
-          // Main content for logged in users
           <>
-            {/* Statistics Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               {stats.map((stat, index) => (
                 <StatsCard key={index} {...stat} />
               ))}
             </div>
 
-            {/* Filters and Tasks Section */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-              {/* Header */}
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-6 border-b border-gray-200">
                 <div>
                   <h2 className="text-xl font-semibold text-gray-900">Task Management</h2>
@@ -285,7 +275,6 @@ function App() {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                  {/* Search Bar */}
                   <div className="w-full sm:w-64">
                     <SearchBar
                       searchTerm={searchTerm}
@@ -294,7 +283,6 @@ function App() {
                     />
                   </div>
 
-                  {/* Filters */}
                   <div className="flex items-center gap-3">
                     <Filter size={18} className="text-gray-400" />
                     <div className="flex flex-wrap gap-2">
@@ -316,7 +304,6 @@ function App() {
                 </div>
               </div>
 
-              {/* Tasks Grid */}
               <div className="p-6">
                 {filteredTasks.length === 0 ? (
                   <div className="text-center py-12">
@@ -366,7 +353,6 @@ function App() {
         )}
       </div>
 
-      {/* Modals */}
       <TaskModal
         isOpen={isTaskModalOpen}
         onClose={closeTaskModal}

@@ -11,7 +11,9 @@ import {
   Settings,
   Search,
   User,
-  LogOut
+  LogOut,
+  Menu,
+  X
 } from 'lucide-react';
 import { Task, TaskFormData, FilterType } from './types';
 import { getStoredTasks, setStoredTasks } from './utils/storage';
@@ -29,6 +31,7 @@ function App() {
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   const { user, signOut, loading: authLoading } = useAuth();
 
@@ -87,6 +90,7 @@ function App() {
 
   const handleSignOut = async () => {
     await signOut();
+    setIsMobileMenuOpen(false);
   };
 
   const closeTaskModal = () => {
@@ -188,24 +192,26 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow-sm border-b border-gray-200">
+      {/* Top Navigation - Improved for Mobile */}
+      <nav className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-8">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                  <CheckCircle2 className="text-white" size={20} />
-                </div>
-                <h1 className="text-xl font-bold text-gray-900">TaskFlow Pro</h1>
+            {/* Logo and Brand */}
+            <div className="flex items-center gap-3 flex-shrink-0">
+              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                <CheckCircle2 className="text-white" size={20} />
               </div>
+              <h1 className="text-xl font-bold text-gray-900 hidden sm:block">TaskFlow Pro</h1>
+              <h1 className="text-xl font-bold text-gray-900 sm:hidden">TFP</h1>
             </div>
 
-            <div className="flex items-center gap-4">
+            {/* Desktop Actions */}
+            <div className="hidden md:flex items-center gap-4">
               {user ? (
                 <>
                   <div className="flex items-center gap-2 text-sm text-gray-700">
                     <User size={16} />
-                    <span>{user.email}</span>
+                    <span className="max-w-32 truncate">{user.email}</span>
                   </div>
                   <button
                     onClick={handleSignOut}
@@ -234,82 +240,146 @@ function App() {
                 Add Task
               </button>
             </div>
+
+            {/* Mobile Menu Button */}
+            <div className="flex md:hidden items-center gap-2">
+              {user && (
+                <button
+                  onClick={() => setIsTaskModalOpen(true)}
+                  className="flex items-center gap-1 bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors"
+                  disabled={!user}
+                  title="Add Task"
+                >
+                  <Plus size={18} />
+                </button>
+              )}
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              </button>
+            </div>
           </div>
+
+          {/* Mobile Menu */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden border-t border-gray-200 py-4 bg-white">
+              {user ? (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-sm text-gray-700 px-2">
+                    <User size={16} />
+                    <span className="truncate">{user.email}</span>
+                  </div>
+                  <button
+                    onClick={handleSignOut}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors text-left"
+                  >
+                    <LogOut size={16} />
+                    Sign Out
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => {
+                    setIsAuthModalOpen(true);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="w-full flex items-center gap-2 bg-green-600 text-white px-4 py-3 rounded-lg hover:bg-green-700 transition-colors justify-center"
+                >
+                  <User size={18} />
+                  Sign In
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </nav>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {!user ? (
-          <div className="text-center py-12">
-            <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <User size={48} className="text-blue-600" />
+          // Welcome screen for non-logged in users
+          <div className="text-center py-8 sm:py-12">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+              <User size={40} className="text-blue-600 sm:w-12 sm:h-12" />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">
               Welcome to TaskFlow Pro
             </h1>
-            <p className="text-gray-600 text-lg mb-8 max-w-2xl mx-auto">
+            <p className="text-gray-600 text-base sm:text-lg mb-6 sm:mb-8 max-w-2xl mx-auto px-4">
               Complete task and project management system. Sign in now to start organizing your tasks professionally.
             </p>
             <button
               onClick={() => setIsAuthModalOpen(true)}
-              className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors text-lg font-semibold"
+              className="bg-blue-600 text-white px-6 sm:px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors text-base sm:text-lg font-semibold"
             >
               Sign In to Get Started
             </button>
           </div>
         ) : (
+          // Main content for logged in users
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            {/* Statistics Cards - Improved for Mobile */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8">
               {stats.map((stat, index) => (
-                <StatsCard key={index} {...stat} />
+                <div key={index} className="col-span-1">
+                  <StatsCard {...stat} />
+                </div>
               ))}
             </div>
 
+            {/* Filters and Tasks Section */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-6 border-b border-gray-200">
-                <div>
-                  <h2 className="text-xl font-semibold text-gray-900">Task Management</h2>
-                  <p className="text-gray-600 mt-1">
-                    {filteredTasks.length} of {tasks.length} tasks
-                  </p>
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                  <div className="w-full sm:w-64">
-                    <SearchBar
-                      searchTerm={searchTerm}
-                      onSearchChange={setSearchTerm}
-                      placeholder="Search tasks..."
-                    />
+              {/* Header */}
+              <div className="flex flex-col gap-4 p-4 sm:p-6 border-b border-gray-200">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
+                  <div>
+                    <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Task Management</h2>
+                    <p className="text-gray-600 text-sm sm:text-base mt-1">
+                      {filteredTasks.length} of {tasks.length} tasks
+                    </p>
                   </div>
 
-                  <div className="flex items-center gap-3">
-                    <Filter size={18} className="text-gray-400" />
-                    <div className="flex flex-wrap gap-2">
-                      {filters.map(({ key, label }) => (
-                        <button
-                          key={key}
-                          onClick={() => setFilter(key)}
-                          className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                            filter === key
-                              ? 'bg-blue-100 text-blue-700 border border-blue-200'
-                              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100 border border-transparent'
-                          }`}
-                        >
-                          {label}
-                        </button>
-                      ))}
+                  <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                    {/* Search Bar */}
+                    <div className="w-full sm:w-48 lg:w-64">
+                      <SearchBar
+                        searchTerm={searchTerm}
+                        onSearchChange={setSearchTerm}
+                        placeholder="Search tasks..."
+                      />
                     </div>
+                  </div>
+                </div>
+
+                {/* Filters - Improved for Mobile */}
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <Filter size={16} className="text-gray-400 flex-shrink-0" />
+                  <div className="flex flex-wrap gap-1 sm:gap-2 overflow-x-auto pb-1">
+                    {filters.map(({ key, label }) => (
+                      <button
+                        key={key}
+                        onClick={() => setFilter(key)}
+                        className={`px-2 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
+                          filter === key
+                            ? 'bg-blue-100 text-blue-700 border border-blue-200'
+                            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100 border border-transparent'
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>
 
-              <div className="p-6">
+              {/* Tasks Grid */}
+              <div className="p-4 sm:p-6">
                 {filteredTasks.length === 0 ? (
-                  <div className="text-center py-12">
-                    <Clock size={48} className="mx-auto text-gray-400 mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">No tasks found</h3>
-                    <p className="text-gray-600 mb-6">
+                  <div className="text-center py-8 sm:py-12">
+                    <Clock size={40} className="mx-auto text-gray-400 mb-3 sm:mb-4" />
+                    <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">No tasks found</h3>
+                    <p className="text-gray-600 text-sm sm:text-base mb-4 sm:mb-6">
                       {searchTerm || filter !== 'all' 
                         ? "No tasks match your current search and filter criteria."
                         : "Get started by creating your first task."
@@ -321,21 +391,21 @@ function App() {
                           setSearchTerm('');
                           setFilter('all');
                         }}
-                        className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
+                        className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors text-sm sm:text-base"
                       >
                         Clear Filters
                       </button>
                     ) : (
                       <button
                         onClick={() => setIsTaskModalOpen(true)}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base"
                       >
                         Create Your First Task
                       </button>
                     )}
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
                     {filteredTasks.map(task => (
                       <TaskCard
                         key={task.id}
@@ -353,6 +423,7 @@ function App() {
         )}
       </div>
 
+      {/* Modals */}
       <TaskModal
         isOpen={isTaskModalOpen}
         onClose={closeTaskModal}

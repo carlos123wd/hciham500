@@ -32,7 +32,7 @@ function App() {
   
   const { user, signOut, loading: authLoading } = useAuth();
 
-  // تحميل المهام
+  // Load tasks
   useEffect(() => {
     const loadTasks = async () => {
       const loadedTasks = await getStoredTasks();
@@ -41,7 +41,7 @@ function App() {
     loadTasks();
   }, [user]);
 
-  // حفظ المهام عند التغيير
+  // Save tasks when they change
   useEffect(() => {
     if (tasks.length > 0) {
       setStoredTasks(tasks);
@@ -96,7 +96,7 @@ function App() {
     setEditingTask(null);
   };
 
-  // فلترة المهام
+  // Filter tasks
   const filteredTasks = tasks.filter(task => {
     const now = new Date();
     const taskDate = new Date(task.dueDate);
@@ -129,7 +129,7 @@ function App() {
     return dateMatch && searchMatch;
   });
 
-  // الإحصائيات
+  // Statistics
   const totalTasks = tasks.length;
   const completedTasks = tasks.filter(task => task.status === 'completed').length;
   const pendingPayments = tasks
@@ -173,7 +173,7 @@ function App() {
 
   const filters: { key: FilterType; label: string }[] = [
     { key: 'all', label: 'All Tasks' },
-    { key: 'today', label: 'Today\'s Tasks' },
+    { key: 'today', label: 'Today' },
     { key: 'week', label: 'This Week' },
     { key: 'month', label: 'This Month' },
     { key: 'overdue', label: 'Overdue' }
@@ -184,7 +184,7 @@ function App() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">جاري التحميل...</p>
+          <p className="text-gray-600">Loading...</p>
         </div>
       </div>
     );
@@ -217,7 +217,7 @@ function App() {
                     className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
                   >
                     <LogOut size={16} />
-                    تسجيل الخروج
+                    Sign Out
                   </button>
                 </>
               ) : (
@@ -226,7 +226,7 @@ function App() {
                   className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
                 >
                   <User size={18} />
-                  تسجيل الدخول
+                  Sign In
                 </button>
               )}
               
@@ -236,7 +236,7 @@ function App() {
                 disabled={!user}
               >
                 <Plus size={18} />
-                إضافة مهمة
+                Add Task
               </button>
             </div>
           </div>
@@ -245,26 +245,26 @@ function App() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {!user ? (
-          // شاشة الترحيب للمستخدمين غير المسجلين
+          // Welcome screen for non-logged in users
           <div className="text-center py-12">
             <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <User size={48} className="text-blue-600" />
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-4">
-              مرحباً في TaskFlow Pro
+              Welcome to TaskFlow Pro
             </h1>
             <p className="text-gray-600 text-lg mb-8 max-w-2xl mx-auto">
-              نظام متكامل لإدارة المهام والمشاريع. سجل الدخول الآن للبدء في تنظيم مهامك بشكل احترافي.
+              Complete task and project management system. Sign in now to start organizing your tasks professionally.
             </p>
             <button
               onClick={() => setIsAuthModalOpen(true)}
               className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors text-lg font-semibold"
             >
-              سجل الدخول للبدء
+              Sign In to Get Started
             </button>
           </div>
         ) : (
-          // المحتوى الرئيسي للمستخدمين المسجلين
+          // Main content for logged in users
           <>
             {/* Statistics Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -278,9 +278,9 @@ function App() {
               {/* Header */}
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-6 border-b border-gray-200">
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-900">إدارة المهام</h2>
+                  <h2 className="text-xl font-semibold text-gray-900">Task Management</h2>
                   <p className="text-gray-600 mt-1">
-                    {filteredTasks.length} من {tasks.length} مهمة
+                    {filteredTasks.length} of {tasks.length} tasks
                   </p>
                 </div>
 
@@ -290,7 +290,7 @@ function App() {
                     <SearchBar
                       searchTerm={searchTerm}
                       onSearchChange={setSearchTerm}
-                      placeholder="ابحث في المهام..."
+                      placeholder="Search tasks..."
                     />
                   </div>
 
@@ -321,11 +321,11 @@ function App() {
                 {filteredTasks.length === 0 ? (
                   <div className="text-center py-12">
                     <Clock size={48} className="mx-auto text-gray-400 mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">لا توجد مهام</h3>
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">No tasks found</h3>
                     <p className="text-gray-600 mb-6">
                       {searchTerm || filter !== 'all' 
-                        ? "لا توجد مهام تطابق معايير البحث والتصفية الحالية."
-                        : "ابدأ بإضافة أول مهمة لك."
+                        ? "No tasks match your current search and filter criteria."
+                        : "Get started by creating your first task."
                       }
                     </p>
                     {(searchTerm || filter !== 'all') ? (
@@ -336,14 +336,14 @@ function App() {
                         }}
                         className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
                       >
-                        مسح الفلاتر
+                        Clear Filters
                       </button>
                     ) : (
                       <button
                         onClick={() => setIsTaskModalOpen(true)}
                         className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
                       >
-                        أضف أول مهمة
+                        Create Your First Task
                       </button>
                     )}
                   </div>

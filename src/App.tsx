@@ -26,6 +26,8 @@ import AuthModal from './components/AuthModal';
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
+
+const handleResetTasks = () => setTasks([]);
   const [filter, setFilter] = useState<FilterType>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);

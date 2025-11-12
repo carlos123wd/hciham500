@@ -1,20 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  CheckCircle2, 
-  Clock, 
-  DollarSign, 
-  TrendingUp, 
-  Plus,
-  Filter,
-  LayoutDashboard,
-  BarChart3,
-  Settings,
-  Search,
-  User,
-  LogOut,
-  Menu,
-  X
-} from 'lucide-react';
 import { Task, TaskFormData, FilterType } from './types';
 import { getStoredTasks, setStoredTasks } from './utils/storage';
 import { useAuth } from './hooks/useAuth';
@@ -23,6 +7,7 @@ import TaskModal from './components/TaskModal';
 import StatsCard from './components/StatsCard';
 import SearchBar from './components/SearchBar';
 import AuthModal from './components/AuthModal';
+import Icon from './components/Icon';
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -145,28 +130,28 @@ function App() {
       title: 'Total Tasks',
       value: totalTasks,
       subtitle: `${overdueTasks} overdue`,
-      icon: LayoutDashboard,
+      icon: 'layout-dashboard' as const,
       color: 'blue' as const,
     },
     {
       title: 'Completed',
       value: completedTasks,
       subtitle: `${progress.toFixed(0)}% progress`,
-      icon: CheckCircle2,
+      icon: 'check-circle-2' as const,
       color: 'green' as const,
     },
     {
       title: 'Pending Payments',
       value: `$${pendingPayments.toLocaleString()}`,
       subtitle: 'Across all tasks',
-      icon: DollarSign,
+      icon: 'dollar-sign' as const,
       color: 'orange' as const,
     },
     {
       title: 'Progress Rate',
       value: `${progress.toFixed(0)}%`,
       subtitle: 'Completion rate',
-      icon: TrendingUp,
+      icon: 'trending-up' as const,
       color: 'purple' as const,
     }
   ];
@@ -199,7 +184,7 @@ function App() {
             {/* Logo and Brand */}
             <div className="flex items-center gap-3 flex-shrink-0">
               <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <CheckCircle2 className="text-white" size={20} />
+                <Icon name="check-circle-2" className="text-white" size={20} />
               </div>
               <h1 className="text-xl font-bold text-gray-900 hidden sm:block">TaskFlow Pro</h1>
               <h1 className="text-xl font-bold text-gray-900 sm:hidden">TFP</h1>
@@ -210,14 +195,14 @@ function App() {
               {user ? (
                 <>
                   <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <User size={16} />
+                    <Icon name="user" size={16} />
                     <span className="max-w-32 truncate">{user.email}</span>
                   </div>
                   <button
                     onClick={handleSignOut}
                     className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
                   >
-                    <LogOut size={16} />
+                    <Icon name="log-out" size={16} />
                     Sign Out
                   </button>
                 </>
@@ -226,7 +211,7 @@ function App() {
                   onClick={() => setIsAuthModalOpen(true)}
                   className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
                 >
-                  <User size={18} />
+                  <Icon name="user" size={18} />
                   Sign In
                 </button>
               )}
@@ -236,7 +221,7 @@ function App() {
                 className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
                 disabled={!user}
               >
-                <Plus size={18} />
+                <Icon name="plus" size={18} />
                 Add Task
               </button>
             </div>
@@ -250,14 +235,14 @@ function App() {
                   disabled={!user}
                   title="Add Task"
                 >
-                  <Plus size={18} />
+                  <Icon name="plus" size={18} />
                 </button>
               )}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
               >
-                {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+                {isMobileMenuOpen ? <Icon name="x" size={20} /> : <Icon name="menu" size={20} />}
               </button>
             </div>
           </div>
@@ -268,14 +253,14 @@ function App() {
               {user ? (
                 <div className="space-y-3">
                   <div className="flex items-center gap-2 text-sm text-gray-700 px-2">
-                    <User size={16} />
+                    <Icon name="user" size={16} />
                     <span className="truncate">{user.email}</span>
                   </div>
                   <button
                     onClick={handleSignOut}
                     className="w-full flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors text-left"
                   >
-                    <LogOut size={16} />
+                    <Icon name="log-out" size={16} />
                     Sign Out
                   </button>
                 </div>
@@ -287,7 +272,7 @@ function App() {
                   }}
                   className="w-full flex items-center gap-2 bg-green-600 text-white px-4 py-3 rounded-lg hover:bg-green-700 transition-colors justify-center"
                 >
-                  <User size={18} />
+                  <Icon name="user" size={18} />
                   Sign In
                 </button>
               )}
@@ -301,7 +286,7 @@ function App() {
           // Welcome screen for non-logged in users
           <div className="text-center py-8 sm:py-12">
             <div className="w-20 h-20 sm:w-24 sm:h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
-              <User size={40} className="text-blue-600 sm:w-12 sm:h-12" />
+              <Icon name="user" size={40} className="text-blue-600 sm:w-12 sm:h-12" />
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">
               Welcome to TaskFlow Pro
@@ -354,7 +339,7 @@ function App() {
 
                 {/* Filters - Improved for Mobile */}
                 <div className="flex items-center gap-2 sm:gap-3">
-                  <Filter size={16} className="text-gray-400 flex-shrink-0" />
+                  <Icon name="filter" size={16} className="text-gray-400 flex-shrink-0" />
                   <div className="flex flex-wrap gap-1 sm:gap-2 overflow-x-auto pb-1">
                     {filters.map(({ key, label }) => (
                       <button
@@ -377,7 +362,7 @@ function App() {
               <div className="p-4 sm:p-6">
                 {filteredTasks.length === 0 ? (
                   <div className="text-center py-8 sm:py-12">
-                    <Clock size={40} className="mx-auto text-gray-400 mb-3 sm:mb-4" />
+                    <Icon name="clock" size={40} className="mx-auto text-gray-400 mb-3 sm:mb-4" />
                     <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">No tasks found</h3>
                     <p className="text-gray-600 text-sm sm:text-base mb-4 sm:mb-6">
                       {searchTerm || filter !== 'all' 

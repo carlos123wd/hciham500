@@ -1,11 +1,12 @@
 import React from 'react';
-import { LucideIcon } from 'lucide-react';
+import Icon from './Icon';
+import dynamicIconImports from 'lucide-react/dynamicIconImports';
 
 interface StatsCardProps {
   title: string;
   value: string | number;
   subtitle?: string;
-  icon: LucideIcon;
+  icon: keyof typeof dynamicIconImports;
   color: 'blue' | 'green' | 'orange' | 'purple';
   trend?: {
     value: number;
@@ -17,7 +18,7 @@ const StatsCard: React.FC<StatsCardProps> = ({
   title, 
   value, 
   subtitle, 
-  icon: Icon, 
+  icon,
   color, 
   trend 
 }) => {
@@ -53,7 +54,7 @@ const StatsCard: React.FC<StatsCardProps> = ({
           )}
         </div>
         <div className={`p-3 rounded-lg border ${colorClasses[color]}`}>
-          <Icon size={24} />
+          <Icon name={icon} size={24} />
         </div>
       </div>
     </div>

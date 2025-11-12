@@ -5,12 +5,14 @@ interface SearchBarProps {
   searchTerm: string;
   onSearchChange: (term: string) => void;
   placeholder?: string;
+  isDarkMode?: boolean;
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ 
   searchTerm, 
   onSearchChange, 
-  placeholder = "Search tasks..." 
+  placeholder = "Search tasks...",
+  isDarkMode
 }) => {
   return (
     <div className="relative">
@@ -21,7 +23,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         type="text"
         value={searchTerm}
         onChange={(e) => onSearchChange(e.target.value)}
-        className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        className={`block w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${isDarkMode ? 'bg-dark-background border-dark-border text-dark-text' : 'border-gray-300'}`}
         placeholder={placeholder}
       />
     </div>

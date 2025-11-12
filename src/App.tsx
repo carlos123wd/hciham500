@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  CheckCircle2, 
-  Clock, 
-  DollarSign, 
-  TrendingUp, 
+import {
+  CheckCircle2,
+  Clock,
+  DollarSign,
+  TrendingUp,
   Plus,
   Filter,
   LayoutDashboard,

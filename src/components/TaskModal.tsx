@@ -103,14 +103,14 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, task, is
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="category" className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
                 Category *
               </label>
               <select
                 id="category"
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className={`w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm ${isDarkMode ? 'bg-dark-background border-dark-border text-dark-text' : 'border-gray-300'}`}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm"
               >
                 <option value="">Select category</option>
                 {categories.map(cat => (
@@ -119,7 +119,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, task, is
               </select>
             </div>
             <div>
-              <label htmlFor="dueDate" className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700 mb-2">
                 Due Date *
               </label>
               <input
@@ -127,14 +127,14 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, task, is
                 type="date"
                 value={formData.dueDate}
                 onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
-                className={`w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm ${isDarkMode ? 'bg-dark-background border-dark-border text-dark-text' : 'border-gray-300'}`}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="amount" className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-2">
                 Amount
               </label>
               <input
@@ -142,19 +142,19 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave, task, is
                 type="number"
                 value={formData.amount}
                 onChange={(e) => setFormData({ ...formData, amount: Number(e.target.value) || 0 })}
-                className={`w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm ${isDarkMode ? 'bg-dark-background border-dark-border text-dark-text' : 'border-gray-300'}`}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm"
                 placeholder="e.g., 50"
               />
             </div>
             <div>
-              <label htmlFor="status" className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-2">
                 Status
               </label>
               <select
                 id="status"
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value as 'pending' | 'completed' })}
-                className={`w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm ${isDarkMode ? 'bg-dark-background border-dark-border text-dark-text' : 'border-gray-300'}`}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm"
               >
                 <option value="pending">Pending</option>
                 <option value="completed">Completed</option>

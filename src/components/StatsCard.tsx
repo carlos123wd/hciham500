@@ -12,6 +12,7 @@ interface StatsCardProps {
     value: number;
     isPositive: boolean;
   };
+  isDarkMode?: boolean;
 }
 
 const StatsCard: React.FC<StatsCardProps> = ({ 
@@ -20,7 +21,8 @@ const StatsCard: React.FC<StatsCardProps> = ({
   subtitle, 
   icon,
   color, 
-  trend 
+  trend,
+  isDarkMode
 }) => {
   const colorClasses = {
     blue: 'bg-blue-50 text-blue-600 border-blue-200',
@@ -35,13 +37,13 @@ const StatsCard: React.FC<StatsCardProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+    <div className={`rounded-xl shadow-sm border p-6 ${isDarkMode ? 'bg-dark-card border-dark-border' : 'bg-white border-gray-200'}`}>
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-gray-600">{title}</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">{value}</p>
+          <p className={`text-sm font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{title}</p>
+          <p className={`text-2xl font-bold mt-1 ${isDarkMode ? 'text-dark-text' : 'text-gray-900'}`}>{value}</p>
           {subtitle && (
-            <p className="text-sm text-gray-500 mt-1">{subtitle}</p>
+            <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>{subtitle}</p>
           )}
           {trend && (
             <div className={`flex items-center gap-1 text-sm font-medium mt-2 ${
@@ -49,7 +51,7 @@ const StatsCard: React.FC<StatsCardProps> = ({
             }`}>
               <span>{trend.isPositive ? '↗' : '↘'}</span>
               <span>{Math.abs(trend.value)}%</span>
-              <span className="text-gray-500 text-xs">from last month</span>
+              <span className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>from last month</span>
             </div>
           )}
         </div>

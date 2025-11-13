@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './index.css'
 
 // أنواع البيانات
@@ -14,31 +14,22 @@ interface Task {
 }
 
 function App() {
-  const [tasks, setTasks] = useState<Task[]>([
-    {
-      id: 1,
-      title: 'Test',
-      description: 'test',
-      category: 'Finance',
-      amount: 1000.00,
-      dueDate: 'Oct 29, 2025',
-      status: 'overdue',
-      priority: 'high'
-    },
-    {
-      id: 2,
-      title: 'Clone with Mocha',
-      description: 'Create project clone',
-      category: 'Development',
-      amount: 500.00,
-      dueDate: 'Nov 15, 2025',
-      status: 'pending',
-      priority: 'medium'
-    }
-  ])
-
+  // ✅ البداية تكون فارغة (ماشي فيها بيانات افتراضية)
+  const [tasks, setTasks] = useState<Task[]>([])
   const [filter, setFilter] = useState('all')
 
+  // 🧩 مستقبلاً هنا تقدر تربط Supabase أو API
+  useEffect(() => {
+    // مثال: لو بغيت تجيب المهام من Supabase
+    // async function loadTasks() {
+    //   const { data, error } = await supabase.from('tasks').select('*')
+    //   if (error) console.error(error)
+    //   else setTasks(data)
+    // }
+    // loadTasks()
+  }, [])
+
+  // 🔍 التصفية
   const filteredTasks = tasks.filter(task => {
     if (filter === 'all') return true
     if (filter === 'today') return task.dueDate.includes('Today')
@@ -46,9 +37,15 @@ function App() {
     return task.status === filter
   })
 
+  // 📊 الإحصائيات
   const completedTasks = tasks.filter(task => task.status === 'completed').length
   const totalAmount = tasks.reduce((sum, task) => sum + task.amount, 0)
   const progress = tasks.length > 0 ? (completedTasks / tasks.length) * 100 : 0
+
+  // ⚙️ دالة إعادة التعيين (تحذف جميع المهام)
+  const handleResetTasks = () => {
+    setTasks([])
+  }
 
   return (
     <div className="app">
@@ -82,7 +79,7 @@ function App() {
 
         <div className="filters">
           <h4>Filter by:</h4>
-          {['All Tasks', 'Today\'s Tasks', 'This Week', 'This Month', 'Overdue'].map(item => (
+          {['All Tasks', "Today's Tasks", 'This Week', 'This Month', 'Overdue'].map(item => (
             <button 
               key={item}
               className={`filter-btn ${filter === item.toLowerCase().replace(/'/g, '').replace(' ', '-') ? 'active' : ''}`}
@@ -92,6 +89,11 @@ function App() {
             </button>
           ))}
         </div>
+
+        {/* 🔘 زر لحذف جميع المهام */}
+        <button className="reset-btn" onClick={handleResetTasks}>
+          Reset All Tasks
+        </button>
       </div>
 
       {/* المحتوى الرئيسي */}
@@ -102,29 +104,33 @@ function App() {
         </header>
 
         <div className="tasks-grid">
-          {filteredTasks.map(task => (
-            <div key={task.id} className={`task-card ${task.status}`}>
-              <div className="task-header">
-                <h3>{task.title}</h3>
-                <span className={`priority ${task.priority}`}>{task.priority}</span>
-              </div>
-              
-              <p className="description">{task.description}</p>
-              
-              <div className="task-details">
-                <span className="category">{task.category}</span>
-                <span className="amount">$ {task.amount.toFixed(2)}</span>
-              </div>
-              
-              <div className="task-footer">
-                <span className={`due-date ${task.status}`}>{task.dueDate}</span>
-                <div className="task-actions">
-                  <button className="complete-btn">✓</button>
-                  <button className="delete-btn">✕</button>
+          {filteredTasks.length === 0 ? (
+            <p className="no-tasks">No tasks yet. Add one!</p>
+          ) : (
+            filteredTasks.map(task => (
+              <div key={task.id} className={`task-card ${task.status}`}>
+                <div className="task-header">
+                  <h3>{task.title}</h3>
+                  <span className={`priority ${task.priority}`}>{task.priority}</span>
+                </div>
+                
+                <p className="description">{task.description}</p>
+                
+                <div className="task-details">
+                  <span className="category">{task.category}</span>
+                  <span className="amount">$ {task.amount.toFixed(2)}</span>
+                </div>
+                
+                <div className="task-footer">
+                  <span className={`due-date ${task.status}`}>{task.dueDate}</span>
+                  <div className="task-actions">
+                    <button className="complete-btn">✓</button>
+                    <button className="delete-btn">✕</button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </div>

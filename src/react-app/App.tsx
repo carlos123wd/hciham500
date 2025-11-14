@@ -1,21 +1,21 @@
 import React, { useState } from "react";
-import { supabase } from "./supabaseClient"; // تأكد import صحيح
+import { supabase } from "./supabaseClient";
 
 const TaskForm = () => {
   const [tasks, setTasks] = useState([]);
 
-  // State ديال الحقول ديال المهمة الجديدة
+  // Inputs state
   const [newTitle, setNewTitle] = useState("");
   const [newCategory, setNewCategory] = useState("General");
   const [newAmount, setNewAmount] = useState(0);
-  const [newDueDate, setNewDueDate] = useState(""); // صيغة: "YYYY-MM-DD"
+  const [newDueDate, setNewDueDate] = useState("");
   const [newPriority, setNewPriority] = useState("medium");
 
-  // دالة لإضافة مهمة جديدة
+  // Add Task function
   const addTask = async () => {
     try {
       const newTask = {
-        user_id: "00000000-0000-0000-0000-000000000001", // ← ضروري
+        user_id: "00000000-0000-0000-0000-000000000001", // ← مؤقت حتى نركّبو Google Auth
         title: newTitle || "New Task",
         category: newCategory || "General",
         amount: newAmount || 0,
@@ -24,8 +24,6 @@ const TaskForm = () => {
         priority: newPriority || "medium",
       };
 
-      console.log("Adding task:", newTask);
-
       const { data, error } = await supabase
         .from("hicham_task")
         .insert([newTask])
@@ -33,15 +31,15 @@ const TaskForm = () => {
 
       if (error) throw error;
 
-      // تحديث state ديال المهام
       setTasks((prev) => [data[0], ...prev]);
 
-      // تصفير الحقول بعد الإضافة
+      // Reset fields
       setNewTitle("");
       setNewCategory("General");
       setNewAmount(0);
       setNewDueDate("");
       setNewPriority("medium");
+
     } catch (error) {
       console.error("SUPABASE ERROR:", error);
     }
@@ -49,6 +47,7 @@ const TaskForm = () => {
 
   return (
     <div className="task-form p-4 border rounded shadow-md w-full max-w-md">
+
       <h2 className="text-xl font-bold mb-4">Add New Task</h2>
 
       <input
@@ -77,7 +76,6 @@ const TaskForm = () => {
 
       <input
         type="date"
-        placeholder="Due Date"
         value={newDueDate}
         onChange={(e) => setNewDueDate(e.target.value)}
         className="w-full mb-2 p-2 border rounded"
@@ -102,6 +100,7 @@ const TaskForm = () => {
 
       <div className="mt-4">
         <h3 className="text-lg font-semibold">Tasks</h3>
+
         <ul>
           {tasks.map((task) => (
             <li key={task.id}>
@@ -110,6 +109,7 @@ const TaskForm = () => {
           ))}
         </ul>
       </div>
+
     </div>
   );
 };
